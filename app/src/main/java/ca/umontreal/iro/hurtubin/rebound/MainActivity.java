@@ -7,8 +7,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,14 +31,21 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(animationView);
 
+        // Garde l'écran allumé même s'il n'y a pas d'activité
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         animationView.setOnTouchListener(new View.OnTouchListener() {
+
+            private long last_time;
+            private double last_x, last_y, last_last_x, last_last_y;
+
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                 ball.x = motionEvent.getX();
                 ball.y = motionEvent.getY();
 
-                // Reset la vitesse de la balle
+                // Reset la vitesse et l'accélération de la balle pour l'empêcher de se déplacer quand on la tient
                 ball.vx = ball.vy = 0;
 
                 return true;
@@ -83,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onAccuracyChanged(Sensor sensor, int i) {}
+        public void onAccuracyChanged(Sensor sensor, int i) {
+        }
     }
 }
